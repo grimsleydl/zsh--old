@@ -108,3 +108,13 @@ if which peco &> /dev/null; then
     zle -N peco_select_history
     bindkey '^R' peco_select_history
 fi
+
+function vcsh_update_ignores () {
+    for repo in $(vcsh list); do
+  vcsh write-gitignore $repo
+  vcsh $repo add -f .gitignore.d/$repo
+  vcsh write-gitignore $repo
+  vcsh $repo add .gitignore.d/$repo
+  vcsh $repo commit -m "Add/update .gitignore.d/$repo"
+done
+}
